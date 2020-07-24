@@ -8,6 +8,4 @@ services:
       - .:/app
     ports:
       - 3000:3000
-    command: npm run start
-    environment:
-      NODE_ENV: test
+    command: npm run dev
