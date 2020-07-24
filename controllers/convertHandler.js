@@ -18,7 +18,7 @@ function ConvertHandler() {
     const re = /(\d+(\.\d+)?)/g;
     const matches = number.match(re);
 
-    if (matches.length > 2) {
+    if (!matches || matches.length > 2) {
       return 'invalid number';
     } else if (matches.length == 2) {
       const [numerator, denominator] = matches;
