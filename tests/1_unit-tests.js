@@ -28,13 +28,13 @@ suite('Unit Tests', function () {
 
     test('Fractional Input', function (done) {
       const input = '1/2L';
-      assert.equal(convertHandler.getNum(input), '1/2');
+      assert.equal(convertHandler.getNum(input), 0.5);
       done();
     });
 
     test('Fractional Input w/ Decimal', function (done) {
       const input = '3.2/5L';
-      assert.equal(convertHandler.getNum(input), '3.2/5');
+      assert.equal(convertHandler.getNum(input), 0.64);
       done();
     });
 
@@ -68,7 +68,7 @@ suite('Unit Tests', function () {
         'KG',
       ];
       input.forEach(function (ele) {
-        assert.equal(convertHandler.getUnit(ele), ele);
+        assert.equal(convertHandler.getUnit(ele), ele.toLowerCase());
       });
       done();
     });

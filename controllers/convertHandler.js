@@ -7,65 +7,53 @@
  */
 
 function ConvertHandler() {
-  this.re = /^(?<num>(\d+\.)?\d+(\/\d+)?)?\s?(?<unit>gal|L|lbs|kg|mi|km)$/i;
-
   this.getNum = function (input) {
-    const matches = input.match(this.re);
+    const unit = this.getUnit(input);
+    const number = input.toLowerCase().split(unit).shift().trim();
 
-    if (!matches) {
-      return 'invalid number';
-    }
-
-    const num = matches[1];
-
-    if (!num) {
+    if (number === '') {
       return 1;
     }
 
-    return matches[1];
+    const re = /(\d+(\.\d+)?)/g;
+    const matches = number.match(re);
+
+    if (matches.length > 2) {
+      return 'invalid number';
+    } else if (matches.length == 2) {
+      const [numerator, denominator] = matches;
+      return parseFloat(numerator) / parseFloat(denominator);
+    }
+
+    return parseFloat(matches[0]);
   };
 
   this.getUnit = function (input) {
-    const matches = input.match(this.re);
+    const re = /(?<unit>gal|L|lbs|kg|mi|km)$/i;
+    const matches = input.match(re);
 
     if (!matches) {
       return 'invalid unit';
     }
 
-    return matches[matches.length - 1];
+    return matches[1].toLowerCase();
   };
 
   this.getReturnUnit = function (initUnit) {
-    const isLowerCase = initUnit === initUnit.toLowerCase();
-
-    let result;
-
     switch (initUnit.toLowerCase()) {
       case 'gal':
-        result = 'l';
-        break;
+        return 'l';
       case 'l':
-        result = 'gal';
-        break;
+        return 'gal';
       case 'mi':
-        result = 'km';
-        break;
+        return 'km';
       case 'km':
-        result = 'mi';
-        break;
+        return 'mi';
       case 'lbs':
-        result = 'kg';
-        break;
+        return 'kg';
       case 'kg':
-        result = 'lbs';
-        break;
+        return 'lbs';
     }
-
-    if (!isLowerCase) {
-      return result.toUpperCase;
-    }
-
-    return result;
   };
 
   this.spellOutUnit = function (unit) {
@@ -107,7 +95,9 @@ function ConvertHandler() {
   };
 
   this.getString = function (initNum, initUnit, returnNum, returnUnit) {
-    var result;
+    const speltInitUnit = this.spellOutUnit(initUnit);
+    const speltReturnUnit = this.spellOutUnit(returnUnit);
+    const result = `${initNum} ${speltInitUnit} converts to ${returnNum} ${speltReturnUnit}`;
 
     return result;
   };
